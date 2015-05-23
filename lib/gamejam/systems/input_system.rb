@@ -23,7 +23,8 @@ class InputSystem < System
         position_comp.x += 500 * delta
       end
 
-      if Gdx.input.isKeyPressed(P1_KEY_TIME_TRAVEL) && input_comp.include?(P1_KEY_TIME_TRAVEL)
+      if Gdx.input.isKeyJustPressed(P1_KEY_TIME_TRAVEL) && input_comp.keys.include?(P1_KEY_TIME_TRAVEL)
+        @game.travel_back_twenty_seconds
       end
     end
   end

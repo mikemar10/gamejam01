@@ -10,12 +10,15 @@ require 'systems/input_system'
 class GameScreen
   include Screen
 
+  attr_accessor :time
+
   def initialize(game)
     $debug = true
+    @time = []
     @game = game
     @entity_manager = EntityManager.new
-    @rendering_system = RenderingSystem.new(@game)
-    @input_system = InputSystem.new(@game)
+    @rendering_system = RenderingSystem.new(self)
+    @input_system = InputSystem.new(self)
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, $screen_width, $screen_height)
     @batch = SpriteBatch.new
@@ -26,6 +29,7 @@ class GameScreen
         Renderable.new("assets/libgdx.png"),
         PlayerInput.new([P1_KEY_UP, P1_KEY_DOWN, P1_KEY_LEFT, P1_KEY_RIGHT, P1_KEY_TIME_TRAVEL])
       ]})
+    save_point_in_time
   end
 
   def show
@@ -43,15 +47,16 @@ class GameScreen
     # anywhere else it will crash.
     # All this for a damn timer. Yeesh.
     @save_task = @timer.scheduleTask(Class.new(com.badlogic.gdx.utils.Timer::Task) {
-      def initialize(entity_manager)
+      def initialize(game)
         super()
-        @em = entity_manager
+        @game = game
       end
 
       def run
-        $logger.info 'save_task'
+        @game.save_point_in_time
+        $logger.info "Points saved: #{@game.time.length}"
       end
-    }.new(nil), 1, 1)
+    }.new(self), 1, 1)
   end
 
   def hide
@@ -75,5 +80,20 @@ class GameScreen
   end
 
   def resume
+  end
+
+  def save_point_in_time
+    @time << Marshal::dump(@entity_manager)
+  end
+
+  def travel_back_twenty_seconds
+    $logger.info "TIME TRAVEL TIME"
+    if @time.length < 20
+      @entity_manager = Marshal::load(@time.first)
+      @time = @time[0..0]
+    else
+      @entity_manager = Marshal::load(@time[-20])
+      @time.pop(20)
+    end
   end
 end

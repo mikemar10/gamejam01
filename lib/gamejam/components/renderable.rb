@@ -15,4 +15,16 @@ Renderable = Component.new(:filename, :rotation, :image) do
   def rotate(amount)
     self.rotation += amount
   end
+
+  def marshal_dump
+    [
+      self.filename,
+      self.rotation
+    ]
+  end
+
+  def marshal_load(array)
+    self.filename, self.rotation = array
+    self.image = $textures[self.filename] ||= Texture.new(Gdx.files.internal(self.filename))
+  end
 end

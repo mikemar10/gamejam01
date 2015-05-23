@@ -35,9 +35,23 @@ class EntityManager
     component_store[entity] = component
   end
 
-  def save_state
+  def marshal_dump
+    [
+      @gravity_components,
+      @playerinput_components,
+      @position_components,
+      @renderable_components,
+      @entities,
+      @tags
+    ]
   end
 
-  def restore_state
+  def marshal_load(array)
+    @gravity_components, 
+    @playerinput_components, 
+    @position_components, 
+    @renderable_components, 
+    @entities, 
+    @tags = array
   end
 end
