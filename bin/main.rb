@@ -17,6 +17,7 @@ java_import com.badlogic.gdx.ApplicationListener
 java_import com.badlogic.gdx.Game
 java_import com.badlogic.gdx.Gdx
 java_import com.badlogic.gdx.Screen
+java_import com.badlogic.gdx.Input
 java_import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 java_import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 java_import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration

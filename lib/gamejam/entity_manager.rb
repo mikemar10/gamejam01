@@ -1,12 +1,12 @@
 require 'components/gravity'
-require 'components/input'
+require 'components/player_input'
 require 'components/position'
 require 'components/renderable'
 require 'securerandom'
 
 class EntityManager
   attr_accessor :gravity_components,
-                :input_components,
+                :playerinput_components,
                 :position_components,
                 :renderable_components,
                 :entities,
@@ -14,7 +14,7 @@ class EntityManager
 
   def initialize
     @gravity_components        = {}
-    @input_components          = {}
+    @playerinput_components          = {}
     @position_components       = {}
     @renderable_components     = {}
     @entities                  = []

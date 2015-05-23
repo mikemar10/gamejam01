@@ -1,10 +1,11 @@
 require 'components/component'
 require 'components/gravity'
-require 'components/input'
+require 'components/player_input'
 require 'components/position'
 require 'components/renderable'
 require 'entity_manager'
 require 'systems/rendering_system'
+require 'systems/input_system'
 
 class GameScreen
   include Screen
@@ -14,6 +15,7 @@ class GameScreen
     @game = game
     @entity_manager = EntityManager.new
     @rendering_system = RenderingSystem.new(@game)
+    @input_system = InputSystem.new(@game)
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, $screen_width, $screen_height)
     @batch = SpriteBatch.new
@@ -21,7 +23,8 @@ class GameScreen
       tags: ['player'],
       components: [
         Position.new(rand(1280), rand(720)),
-        Renderable.new("assets/libgdx.png")
+        Renderable.new("assets/libgdx.png"),
+        PlayerInput.new([P1_KEY_UP, P1_KEY_DOWN, P1_KEY_LEFT, P1_KEY_RIGHT, P1_KEY_TIME_TRAVEL])
       ]})
   end
 
@@ -61,6 +64,7 @@ class GameScreen
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
     @camera.update
     @batch.setProjectionMatrix(@camera.combined)
+    @input_system.process(@entity_manager, delta)
     @rendering_system.process(@entity_manager, @camera, @batch)
   end
 
