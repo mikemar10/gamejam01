@@ -5,6 +5,7 @@ require 'components/position'
 require 'components/programmer_art'
 require 'components/renderable'
 require 'entity_manager'
+require 'systems/rendering_system'
 
 class GameScreen
   include Screen
@@ -12,6 +13,10 @@ class GameScreen
   def initialize(game)
     @game = game
     @entity_manager = EntityManager.new
+    @rendering_system = RenderingSystem.new(@game)
+    @camera = OrthographicCamera.new
+    @camera.setToOrtho(false, 1280, 720) # FIXME: use constants
+    @batch = SpriteBatch.new
     @player = @entity_manager.create_entity({
       tags: ['player'],
       components: [
@@ -54,6 +59,9 @@ class GameScreen
     #@fps_logger.log
     Gdx.gl.glClearColor(0, 0.7, 0, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+    @camera.update
+    @batch.setProjectionMatrix(@camera.combined)
+    @rendering_system.process(@entity_manager, @camera, @batch)
   end
 
   def resize(w, h)

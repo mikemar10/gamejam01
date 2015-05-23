@@ -17,7 +17,6 @@ class EntityManager
     @gravity_components        = {}
     @input_components          = {}
     @position_components       = {}
-    @programmer_art_components = {}
     @renderable_components     = {}
     @entities                  = []
     @tags                      = {}
@@ -35,5 +34,11 @@ class EntityManager
   def add_component(entity, component)
     component_store = instance_variable_get("@#{component.class.to_s.downcase}_components")
     component_store[entity] = component
+  end
+
+  def save_state
+  end
+
+  def restore_state
   end
 end
