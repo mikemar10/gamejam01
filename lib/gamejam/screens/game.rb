@@ -2,7 +2,6 @@ require 'components/component'
 require 'components/gravity'
 require 'components/input'
 require 'components/position'
-require 'components/programmer_art'
 require 'components/renderable'
 require 'entity_manager'
 require 'systems/rendering_system'
@@ -11,17 +10,18 @@ class GameScreen
   include Screen
 
   def initialize(game)
+    $debug = true
     @game = game
     @entity_manager = EntityManager.new
     @rendering_system = RenderingSystem.new(@game)
     @camera = OrthographicCamera.new
-    @camera.setToOrtho(false, 1280, 720) # FIXME: use constants
+    @camera.setToOrtho(false, $screen_width, $screen_height)
     @batch = SpriteBatch.new
-    @player = @entity_manager.create_entity({
+    @entity_manager.create_entity({
       tags: ['player'],
       components: [
-        Position.new(0, 0),
-        Renderable.new("assets/libgdx.png", 0)
+        Position.new(rand(1280), rand(720)),
+        Renderable.new("assets/libgdx.png")
       ]})
   end
 
@@ -56,7 +56,7 @@ class GameScreen
   end
 
   def render(delta)
-    #@fps_logger.log
+    @fps_logger.log if $debug
     Gdx.gl.glClearColor(0, 0.7, 0, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
     @camera.update

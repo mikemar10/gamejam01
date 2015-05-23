@@ -39,9 +39,11 @@ $logger = Logger.new(STDERR)
 $logger.level = Logger::DEBUG
 $logger.info "It's time to game jam!"
 
+$screen_width = 1280
+$screen_height = 720
 cfg = LwjglApplicationConfiguration.new
 cfg.title = '20 Seconds To Try Again'
-cfg.width = 1280
-cfg.height = 720
+cfg.width = $screen_width
+cfg.height = $screen_height
 
 LwjglApplication.new(GameJam.new, cfg)

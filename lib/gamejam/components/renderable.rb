@@ -7,7 +7,8 @@ Renderable = Component.new(:filename, :rotation, :image) do
 
   def initialize(*)
     super
-    self.image = Texture.new(Gdx.files.internal(self.filename))
+    $textures ||= Hash.new
+    self.image = $textures[self.filename] ||= Texture.new(Gdx.files.internal(self.filename))
     self.rotation ||= 0
   end
 

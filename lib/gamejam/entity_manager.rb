@@ -1,7 +1,6 @@
 require 'components/gravity'
 require 'components/input'
 require 'components/position'
-require 'components/programmer_art'
 require 'components/renderable'
 require 'securerandom'
 
