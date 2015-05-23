@@ -3,9 +3,11 @@ require 'components/gravity'
 require 'components/player_input'
 require 'components/position'
 require 'components/renderable'
+require 'components/tile'
 require 'entity_manager'
 require 'systems/rendering_system'
 require 'systems/input_system'
+require 'systems/tile_system'
 
 class GameScreen
   include Screen
@@ -13,22 +15,40 @@ class GameScreen
   attr_accessor :time
 
   def initialize(game)
-    $debug = true
+    $debug = false
     @time = []
     @game = game
     @entity_manager = EntityManager.new
     @rendering_system = RenderingSystem.new(self)
     @input_system = InputSystem.new(self)
+    @tile_system = TileSystem.new(self)
     @camera = OrthographicCamera.new
     @camera.setToOrtho(false, $screen_width, $screen_height)
     @batch = SpriteBatch.new
-    @entity_manager.create_entity({
+    @player = @entity_manager.create_entity({
       tags: ['player'],
       components: [
         Position.new(rand(1280), rand(720)),
         Renderable.new("assets/libgdx.png"),
         PlayerInput.new([P1_KEY_UP, P1_KEY_DOWN, P1_KEY_LEFT, P1_KEY_RIGHT, P1_KEY_TIME_TRAVEL])
       ]})
+
+    @map = TmxMapLoader.new.load("assets/test_map.tmx")
+    layer = @map.layers.first
+    (0..layer.width).each do |x|
+      (0..layer.height).each do |y|
+        tile = layer.get_cell(x, y)
+        unless tile.nil?
+          tile = tile.tile
+          @entity_manager.create_entity({
+            tags: ['tile'],
+            components: [
+              Tile.new(x * layer.tile_width, y * layer.tile_height, tile.texture_region)
+            ]})
+        end
+      end
+    end
+
     save_point_in_time
   end
 
@@ -54,7 +74,6 @@ class GameScreen
 
       def run
         @game.save_point_in_time
-        $logger.info "Points saved: #{@game.time.length}"
       end
     }.new(self), 1, 1)
   end
@@ -67,10 +86,13 @@ class GameScreen
     @fps_logger.log if $debug
     Gdx.gl.glClearColor(0, 0.7, 0, 1)
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+    player_position = @entity_manager.position_components[@player]
+    @camera.position.set(player_position.x, player_position.y, 0)
     @camera.update
     @batch.setProjectionMatrix(@camera.combined)
     @input_system.process(@entity_manager, delta)
-    @rendering_system.process(@entity_manager, @camera, @batch)
+    @rendering_system.process(@entity_manager, @batch)
+    @tile_system.process(@entity_manager, @batch)
   end
 
   def resize(w, h)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-up" width="30" height="30" tilewidth="70" tileheight="70" nextobjectid="5">
+ <tileset firstgid="1" source="tileset_forTiled.tsx"/>
+ <layer name="Tile Layer 1" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztzTENAAAIBLGXgBD868MFMLTJzZcAANvq6Onr6+vr+/PbRw0H6QbJ
+  </data>
+ </layer>
+ <objectgroup name="ground">
+  <properties>
+   <property name="tags" value="ground"/>
+  </properties>
+  <object id="1" x="0" y="1120" width="70" height="910"/>
+  <object id="3" x="0" y="2030" width="2100" height="70"/>
+  <object id="4" x="2030" y="1120" width="70" height="910"/>
+ </objectgroup>
+</map>

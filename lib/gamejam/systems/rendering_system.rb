@@ -3,7 +3,7 @@ require 'components/renderable'
 require 'components/position'
 
 class RenderingSystem < System
-  def process(entity_manager, camera, batch)
+  def process(entity_manager, batch)
     batch.begin
     entity_manager.renderable_components.each do |id, render_comp|
       position_comp = entity_manager.position_components[id]

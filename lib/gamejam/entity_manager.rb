@@ -2,6 +2,7 @@ require 'components/gravity'
 require 'components/player_input'
 require 'components/position'
 require 'components/renderable'
+require 'components/tile'
 require 'securerandom'
 
 class EntityManager
@@ -9,16 +10,18 @@ class EntityManager
                 :playerinput_components,
                 :position_components,
                 :renderable_components,
+                :tile_components,
                 :entities,
                 :tags
 
   def initialize
-    @gravity_components        = {}
-    @playerinput_components          = {}
-    @position_components       = {}
-    @renderable_components     = {}
-    @entities                  = []
-    @tags                      = {}
+    @gravity_components     = {}
+    @playerinput_components = {}
+    @position_components    = {}
+    @renderable_components  = {}
+    @tile_components        = {}
+    @entities               = []
+    @tags                   = {}
   end
 
   def create_entity(opts)
@@ -41,8 +44,9 @@ class EntityManager
       @playerinput_components,
       @position_components,
       @renderable_components,
+      @tile_components,
       @entities,
-      @tags
+      @tags,
     ]
   end
 
@@ -51,6 +55,7 @@ class EntityManager
     @playerinput_components, 
     @position_components, 
     @renderable_components, 
+    @tile_components,
     @entities, 
     @tags = array
   end
