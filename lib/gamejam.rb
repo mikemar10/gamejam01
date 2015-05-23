@@ -1,12 +1,12 @@
 require 'screens/menu'
+require 'screens/game'
 
 class GameJam < Game
-
   def initialize
   end
 
   def create
-    setScreen(MenuScreen.new(self))
+    setScreen(GameScreen.new(self))
   end
 
   def dispose

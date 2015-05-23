@@ -8,7 +8,6 @@ $:.push File.expand_path('../../third_party', __FILE__)
 
 # Java imports for libgdx
 require 'java'
-require 'gdx-backend-headless.jar'
 require 'gdx-backend-lwjgl-natives.jar'
 require 'gdx-backend-lwjgl.jar'
 require 'gdx-natives.jar'
